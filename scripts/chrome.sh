@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Define the download URL for Chromium for Linux
+CHROME_DOWNLOAD_URL="https://commondatastorage.googleapis.com/chromium-browser-snapshots/Linux_x64"
+
+# Fetch the latest build version number
+latest=$(curl -s $CHROME_DOWNLOAD_URL/LAST_CHANGE)
+
+# Construct the download URL for the latest Linux Chromium build
+download_url="$CHROME_DOWNLOAD_URL/$latest/chrome-linux.zip"
+
+# Define the directory to store the Chromium binary
+CHROME_DIR="./chromium/linux"
+
+# Create the directory if it doesn't exist
+mkdir -p $CHROME_DIR
+
+# Download and unzip Chromium
+echo "Downloading Chromium for Linux (Build $latest)..."
+curl -L $download_url -o chrome-linux.zip
+
+echo "Extracting Chromium..."
+unzip chrome-linux.zip -d $CHROME_DIR
+
+# Cleanup
+rm chrome-linux.zip
+
+echo "Chromium has been downloaded and extracted to $CHROME_DIR"

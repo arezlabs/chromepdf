@@ -1,0 +1,9 @@
+{
+  "name": "chrome-pdf",
+  "version": "1.0.0",
+  "description": "HTML to PDF conversion using Go and headless Chromium",
+  "main": "index.js",
+  "author": "Thushar M Prakash",
+  "license": "MIT",
+  "dependencies": {}
+}
