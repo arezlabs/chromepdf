@@ -25,8 +25,14 @@ func NewPDFGenerator() *PDFGenerator {
 	// Detect platform and set the correct Chromium binary path
 	switch runtime.GOOS {
 	case "linux":
-		// Set the path to the Chromium binary in the linux folder
-		chromiumPath = filepath.Join(".", "chromium", "linux", "chrome-linux", "chrome")
+		// Point to the pre-downloaded Chromium binary for Linux
+		chromiumPath = filepath.Join("..", "..", "chromium", "linux", "chrome-linux", "chrome")
+	case "darwin":
+		// For macOS, adjust the path to the Chromium binary
+		chromiumPath = filepath.Join("..", "..", "chromium", "macos", "chrome-mac", "Chromium.app", "Contents", "MacOS", "Chromium")
+	case "windows":
+		// For Windows, adjust the path
+		chromiumPath = filepath.Join("..", "..", "chromium", "windows", "chrome-win", "chrome.exe")
 	default:
 		fmt.Println("Unsupported platform")
 		os.Exit(1)
@@ -44,13 +50,13 @@ func (p *PDFGenerator) ConvertHTMLToPDF(htmlContent, outputPath string) error {
 		chromedp.Flag("headless", true),
 		chromedp.Flag("disable-gpu", true),
 		chromedp.Flag("no-sandbox", true),
-		chromedp.Flag("disable-software-rasterizer", true),
 	)
 	defer cancel()
 
 	ctx, cancel = chromedp.NewContext(ctx)
 	defer cancel()
 
+	// Create a temporary HTML file to render to PDF
 	tmpFile, err := os.CreateTemp("", "temp.html")
 	if err != nil {
 		return err
@@ -65,7 +71,7 @@ func (p *PDFGenerator) ConvertHTMLToPDF(htmlContent, outputPath string) error {
 	var pdfBuffer []byte
 	err = chromedp.Run(ctx, chromedp.Tasks{
 		chromedp.Navigate(fmt.Sprintf("file://%s", tmpFile.Name())),
-		chromedp.Sleep(2 * time.Second), // Wait for rendering
+		chromedp.Sleep(2 * time.Second),
 		chromedp.ActionFunc(func(ctx context.Context) error {
 			var err error
 			pdfBuffer, _, err = page.PrintToPDF().
@@ -96,13 +102,13 @@ func (p *PDFGenerator) ConvertHTMLToPDFBase64(htmlContent string) (string, error
 		chromedp.Flag("headless", true),
 		chromedp.Flag("disable-gpu", true),
 		chromedp.Flag("no-sandbox", true),
-		chromedp.Flag("disable-software-rasterizer", true),
 	)
 	defer cancel()
 
 	ctx, cancel = chromedp.NewContext(ctx)
 	defer cancel()
 
+	// Create a temporary HTML file to render to PDF
 	tmpFile, err := os.CreateTemp("", "temp.html")
 	if err != nil {
 		return "", err
@@ -117,7 +123,7 @@ func (p *PDFGenerator) ConvertHTMLToPDFBase64(htmlContent string) (string, error
 	var pdfBuffer []byte
 	err = chromedp.Run(ctx, chromedp.Tasks{
 		chromedp.Navigate(fmt.Sprintf("file://%s", tmpFile.Name())),
-		chromedp.Sleep(2 * time.Second), // Wait for rendering
+		chromedp.Sleep(2 * time.Second),
 		chromedp.ActionFunc(func(ctx context.Context) error {
 			var err error
 			pdfBuffer, _, err = page.PrintToPDF().

@@ -1,15 +1,18 @@
-.PHONY: all linux macos windows clean
+# Makefile for building and running the ChromePDF project
 
-all: linux macos windows
+GO_BIN_PATH := go/bin
+GO_SRC_PATH := go/src
+OUTPUT_BINARY := $(GO_BIN_PATH)/chrome-pdf
 
-linux:
-	GOOS=linux GOARCH=amd64 go build -o bin/chrome-pdf_linux main.go
+.PHONY: all build clean
 
-macos:
-	GOOS=darwin GOARCH=amd64 go build -o bin/chrome-pdf_macos main.go
+all: build
 
-windows:
-	GOOS=windows GOARCH=amd64 go build -o bin/chrome-pdf_windows.exe main.go
+# Build the Go binary
+build:
+	mkdir -p $(GO_BIN_PATH)
+	go build -o $(OUTPUT_BINARY) ./$(GO_SRC_PATH)
 
+# Clean up the binaries
 clean:
-	rm -rf bin/*
+	rm -rf $(GO_BIN_PATH)/*
