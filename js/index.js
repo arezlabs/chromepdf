@@ -1,27 +1,12 @@
 const { execFile } = require('child_process');
 const path = require('path');
+const fs = require('fs');
 
-let goBinary, chromiumBinary;
+const goBinary = path.join(__dirname, 'bin', 'chrome-pdf');
 
-switch (process.platform) {
-  case 'linux':
-    goBinary = path.join(__dirname, '../go/bin/chrome-pdf_linux');
-    chromiumBinary = path.join(__dirname, '../go/chromium/chrome-linux');
-    break;
-  case 'darwin':
-    goBinary = path.join(__dirname, '../go/bin/chrome-pdf_macos');
-    chromiumBinary = path.join(__dirname, '../go/chromium/chrome-macos');
-    break;
-  case 'win32':
-    goBinary = path.join(__dirname, '../go/bin/chrome-pdf_windows.exe');
-    chromiumBinary = path.join(__dirname, '../go/chromium/chrome-windows.exe');
-    break;
-  default:
-    throw new Error('Unsupported platform');
-}
-
+// Function to convert HTML to PDF and save it to a file
 function convertHTMLToPDF(htmlContent, outputFile, callback) {
-  const args = [htmlContent, outputFile, chromiumBinary];
+  const args = [htmlContent, outputFile];
   execFile(goBinary, args, (error, stdout, stderr) => {
     if (error) {
       callback(`Error generating PDF: ${stderr}`);
@@ -31,4 +16,16 @@ function convertHTMLToPDF(htmlContent, outputFile, callback) {
   });
 }
 
-module.exports = { convertHTMLToPDF };
+// Function to convert HTML to PDF and return Base64-encoded PDF
+function convertHTMLToPDFBase64(htmlContent, callback) {
+  const args = [htmlContent, '--base64']; // Modify Go code to support --base64 argument
+  execFile(goBinary, args, (error, stdout, stderr) => {
+    if (error) {
+      callback(`Error generating PDF: ${stderr}`);
+    } else {
+      callback(null, stdout.trim()); // The Base64-encoded PDF is returned in stdout
+    }
+  });
+}
+
+module.exports = { convertHTMLToPDF, convertHTMLToPDFBase64 };

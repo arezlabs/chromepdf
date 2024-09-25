@@ -17,3 +17,4 @@ require (
 	golang.org/x/sys v0.22.0 // indirect
 )
 
+replace github.com/arezlabs/chromepdf => ./pdfgen
