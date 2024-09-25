@@ -1,8 +1,7 @@
 const { execFile } = require('child_process');
 const path = require('path');
-const fs = require('fs');
 
-const goBinary = path.join(__dirname, 'bin', 'chrome-pdf');
+const goBinary = path.join(__dirname, '..', 'go', 'bin', 'chrome-pdf');
 
 // Function to convert HTML to PDF and save it to a file
 function convertHTMLToPDF(htmlContent, outputFile, callback) {
@@ -18,10 +17,10 @@ function convertHTMLToPDF(htmlContent, outputFile, callback) {
 
 // Function to convert HTML to PDF and return Base64-encoded PDF
 function convertHTMLToPDFBase64(htmlContent, callback) {
-  const args = [htmlContent, '--base64']; // Modify Go code to support --base64 argument
+  const args = [htmlContent, '--base64'];
   execFile(goBinary, args, (error, stdout, stderr) => {
     if (error) {
-      callback(`Error generating PDF: ${stderr}`);
+      callback(`Error generating Base64 PDF: ${stderr}`);
     } else {
       callback(null, stdout.trim()); // The Base64-encoded PDF is returned in stdout
     }

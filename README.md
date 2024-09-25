@@ -6,7 +6,7 @@ ChromePDF is a Go-based library that converts HTML content into a PDF using head
 ## Features
 - Convert HTML to PDF using headless Chromium.
 - Supports both file output and Base64 encoded PDF output.
-- Cross-platform support (Linux, macOS, Windows).
+- Cross-platform support (Linux, macOS, Windows). (Only linux supported now. DEV in progress)
 - Easy setup in Go and JavaScript environments (NPM).
 
 ---
