@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/arezlabs/chromepdf/go/src/pdfgen"
+	"github.com/arezlabs/chromepdf/go/src/pdfgen" // Updated import path
 )
 
 func main() {
