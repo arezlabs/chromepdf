@@ -10,7 +10,7 @@ latest=$(curl -s $CHROME_DOWNLOAD_URL/LAST_CHANGE)
 download_url="$CHROME_DOWNLOAD_URL/$latest/chrome-linux.zip"
 
 # Define the directory to store the Chromium binary
-CHROME_DIR="../go/chromium/linux"
+CHROME_DIR="../chromium/linux"
 
 # Create the directory if it doesn't exist
 mkdir -p $CHROME_DIR
